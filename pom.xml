@@ -1,0 +1,263 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>personal.jeremyxu</groupId>
+    <artifactId>ssm-scaffold</artifactId>
+    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>ssm-scaffold Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <junit-version>4.12</junit-version>
+        <spring-version>4.3.2.RELEASE</spring-version>
+        <mybatis-version>3.4.1</mybatis-version>
+        <mybatis-spring-version>1.3.0</mybatis-spring-version>
+        <druid-version>1.0.24</druid-version>
+        <fastjson-version>1.2.16</fastjson-version>
+        <mysql-connection-version>5.1.6</mysql-connection-version>
+        <mybatis-generator-version>1.3.2</mybatis-generator-version>
+        <slf4j-version>1.7.12</slf4j-version>
+        <log4j-version>1.2.17</log4j-version>
+        <servlet-api-version>2.5</servlet-api-version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis-spring-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connection-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${servlet-api-version}</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <finalName>ssm-scaffold</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>generator*.*</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>${mybatis-generator-version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>personal.jeremyxu2010</groupId>
+                        <artifactId>mybatis-generator-plugins</artifactId>
+                        <version>1.0.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!-- 打war包前安装npm依赖及编译前端代码 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.3.2</version>
+                <executions>
+                    <execution>
+                        <id>install_npm_dependences</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>yarn</executable>
+                            <workingDirectory>src/main/frontend_react</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build_frontend</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm</executable>
+                            <workingDirectory>src/main/frontend_react</workingDirectory>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 将编译后的前端代码也打入war包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <!-- this is relative to the pom.xml directory -->
+                            <directory>src/main/frontend_react/build</directory>
+                            <!-- the default value is ** -->
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                            <!-- there's no default value for this -->
+                            <excludes>
+                                <exclude>asset-manifest.json</exclude>
+                                <exclude>**/*.css.map</exclude>
+                                <exclude>**/*.js.map</exclude>
+                            </excludes>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <!-- 将最后打出的war包拷贝至dockerfiles/wars目录 -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <copy file="${basedir}/target/${project.artifactId}.war" tofile="${basedir}/dockerfiles/wars/${project.artifactId}.war" />
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+</project>
